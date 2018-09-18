@@ -1,14 +1,11 @@
 'use strict';
 
-module.exports.hello = async (event, context) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
+const expressHandler = require('serverless-express/handler');
+const app = require('./app');
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+process.env.SERVERLESS_EXPRESS_PLATFORM = 'aws';
+
+const handler = expressHandler(app);
+module.exports.express = async(event, context) => {
+  return handler(event, context, 'PROMISE').promise;
 };
